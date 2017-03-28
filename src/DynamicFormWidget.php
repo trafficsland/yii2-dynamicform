@@ -8,6 +8,7 @@
 namespace trafficsland\dynamicform;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\base\InvalidConfigException;
@@ -25,7 +26,7 @@ class DynamicFormWidget extends \yii\base\Widget
      * @var string
      */
     public $widgetContainer;
-     /**
+    /**
      * @var string
      */
     public $widgetBody;
@@ -41,7 +42,7 @@ class DynamicFormWidget extends \yii\base\Widget
      * @var string
      */
     public $insertButton;
-     /**
+    /**
      * @var string
      */
     public $deleteButton;
@@ -49,7 +50,7 @@ class DynamicFormWidget extends \yii\base\Widget
      * @var string 'bottom' or 'top';
      */
     public $insertPosition = 'bottom';
-     /**
+    /**
      * @var Model|ActiveRecord the model used for the form
      */
     public $model;
@@ -61,6 +62,10 @@ class DynamicFormWidget extends \yii\base\Widget
      * @var array fields to be validated.
      */
     public $formFields;
+    /**
+     * @var bool
+     */
+    public $own_fields;
     /**
      * @var integer
      */
@@ -133,11 +138,22 @@ class DynamicFormWidget extends \yii\base\Widget
         $this->_options['min']             = $this->min;
         $this->_options['fields']          = [];
 
-        foreach ($this->formFields as $field) {
-             $this->_options['fields'][] = [
-                'id' => Html::getInputId($this->model, '[{}]' . $field),
-                'name' => Html::getInputName($this->model, '[{}]' . $field)
-            ];
+        if ($this->own_fields) {
+            foreach ($this->formFields as $fields) {
+                #foreach ($fields as $field) {
+                $this->_options['fields'][] = [
+                    'id' => $fields['id'],
+                    'name' => $fields['name']
+                ];
+                #}
+            }
+        } else {
+            foreach ($this->formFields as $field) {
+                $this->_options['fields'][] = [
+                    'id'   => Html::getInputId($this->model, '[{}]' . $field),
+                    'name' => Html::getInputName($this->model, '[{}]' . $field)
+                ];
+            }
         }
 
         ob_start();

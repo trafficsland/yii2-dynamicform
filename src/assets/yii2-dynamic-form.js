@@ -1,7 +1,7 @@
 /**
  * yii2-dynamic-form
  *
- * A jQuery plugin to clone form elements in a nested manner, maintaining accessibility. 
+ * A jQuery plugin to clone form elements in a nested manner, maintaining accessibility.
  *
  * @author Wanderson Bragança <wanderson.wbc@gmail.com>
  */
@@ -39,11 +39,11 @@
         },
 
         addItem: function (widgetOptions, e, $elem) {
-           _addItem(widgetOptions, e, $elem);
+            _addItem(widgetOptions, e, $elem);
         },
 
         deleteItem: function (widgetOptions, e, $elem) {
-           _deleteItem(widgetOptions, e, $elem);
+            _deleteItem(widgetOptions, e, $elem);
         },
 
         updateContainer: function () {
@@ -81,12 +81,12 @@
             } else if($(this).is('select')) {
                 $(this).find('option:selected').removeAttr("selected");
             } else {
-                $(this).val(''); 
+                $(this).val('');
             }
         });
 
         // remove "error/success" css class
-        var yiiActiveFormData = $('#' + widgetOptions.formId).yiiActiveForm('data');
+        var yiiActiveFormData = $('#dynamic-form').yiiActiveForm('data');
         $template.find('.' + yiiActiveFormData.settings.errorCssClass).removeClass(yiiActiveFormData.settings.errorCssClass);
         $template.find('.' + yiiActiveFormData.settings.successCssClass).removeClass(yiiActiveFormData.settings.successCssClass);
 
@@ -147,8 +147,8 @@
                     aux[level] = i;
                     currentWidgetOptions.fields.forEach(function(input) {
                         var id = input.id.replace("{}", aux.join('-'));
-                        if ($("#" + currentWidgetOptions.formId).yiiActiveForm("find", id) !== "undefined") {
-                            $("#" + currentWidgetOptions.formId).yiiActiveForm("remove", id);
+                        if ($('#dynamic-form').yiiActiveForm("find", id) !== "undefined") {
+                            $('#dynamic-form').yiiActiveForm("remove", id);
                         }
                     });
                 }
@@ -162,8 +162,8 @@
 
             widgetOptions.fields.forEach(function(input) {
                 var id = input.id.replace("{}", identifiers.join('-'));
-                if ($("#" + widgetOptions.formId).yiiActiveForm("find", id) !== "undefined") {
-                    $("#" + widgetOptions.formId).yiiActiveForm("remove", id);
+                if ($('#dynamic-form').yiiActiveForm("find", id) !== "undefined") {
+                    $('#dynamic-form').yiiActiveForm("remove", id);
                 }
             });
         }
@@ -199,7 +199,7 @@
                 matches[2] = matches[2].substring(1, matches[2].length - 1);
                 var identifiers = matches[2].split('-');
                 identifiers[0] = index;
-                
+
                 if (identifiers.length > 1) {
                     var widgetsOptions = [];
                     $elem.parents('div[data-dynamicform]').each(function(i){
@@ -215,7 +215,7 @@
                 newID = matches[1] + '-' + identifiers.join('-') + '-' + matches[3];
                 $elem.attr('id', newID);
             } else {
-                newID = id + index;
+                newID = id + '-' + index;
                 $elem.attr('id', newID);
             }
         }
@@ -225,7 +225,7 @@
                 $(this).removeClass('field-' + id).addClass('field-' + newID);
             });
             // update "for" attribute
-            $elem.closest(widgetOptions.widgetItem).find("label[for='" + id + "']").attr('for',newID); 
+            $elem.closest(widgetOptions.widgetItem).find("label[for='" + id + "']").attr('for',newID);
         }
 
         return newID;
@@ -250,8 +250,12 @@
 
                     widgetsOptions = widgetsOptions.reverse();
                     for (var i = identifiers.length - 1; i >= 1; i--) {
-                        identifiers[i] = $elem.closest(widgetsOptions[i].widgetItem).index();
+                        // identifiers[i] = $elem.closest(widgetsOptions[i].widgetItem).index();
+                        if(typeof widgetsOptions[i] !== 'undefined'){
+                            identifiers[i] = $elem.closest(widgetsOptions[i].widgetItem).index();
+                        }
                     }
+
                 }
 
                 name = matches[1] + '[' + identifiers.join('][') + ']' + matches[3];
@@ -266,8 +270,8 @@
         var widgetOptionsRoot = _getWidgetOptionsRoot(widgetOptions);
 
         $(widgetOptionsRoot.widgetItem).each(function(index) {
-            var $item = $(this);
-            $(this).find('*').each(function() {
+            var item = $(this);
+            $(item).find('*').each(function() {
                 // update "id" attribute
                 _updateAttrID($(this), index);
 
@@ -287,11 +291,11 @@
             attribute.value     = $("#" + id).val();
             attribute.status    = 0;
 
-            if ($("#" + widgetOptions.formId).yiiActiveForm("find", id) !== "undefined") {
-                $("#" + widgetOptions.formId).yiiActiveForm("remove", id);
+            if ($('#dynamic-form').yiiActiveForm("find", id) !== "undefined") {
+                $('#dynamic-form').yiiActiveForm("remove", id);
             }
 
-            $("#" + widgetOptions.formId).yiiActiveForm("add", attribute);
+            $('#dynamic-form').yiiActiveForm("add", attribute);
         }
     };
 
@@ -311,8 +315,8 @@
                     var level       = _getLevel($(this));
                     var identifiers = _createIdentifiers(level -1);
                     var baseID      = matches[1] + '-' + identifiers.join('-') + '-' + matches[3];
-                    var attribute   = $("#" + currentWidgetOptions.formId).yiiActiveForm("find", baseID);
-                    _fixFormValidatonInput(currentWidgetOptions, attribute, id, name);
+                    var attribute   = $('#dynamic-form').yiiActiveForm("find", baseID);
+                    _fixFormValidatonInput(currentWidgetOptions, baseID, id, name);
                 }
             }
         });
@@ -467,7 +471,7 @@
                     window[kvClose] = true;
                 });
 
-               if (configDepdrop) {
+                if (configDepdrop) {
                     var loadingText = (configDepdrop.loadingText) ? configDepdrop.loadingText : 'Loading ...';
                     initDepdropS2(id, loadingText);
                 }
