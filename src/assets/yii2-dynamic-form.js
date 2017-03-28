@@ -240,7 +240,7 @@
             if (matches && matches.length === 4) {
                 matches[2] = matches[2].replace(/\]\[/g, "-").replace(/\]|\[/g, '');
                 var identifiers = matches[2].split('-');
-                identifiers[0] = index;
+                identifiers[1] = index;
 
                 if (identifiers.length > 1) {
                     var widgetsOptions = [];
@@ -250,7 +250,6 @@
 
                     widgetsOptions = widgetsOptions.reverse();
                     for (var i = identifiers.length - 1; i >= 1; i--) {
-                        // identifiers[i] = $elem.closest(widgetsOptions[i].widgetItem).index();
                         if(typeof widgetsOptions[i] !== 'undefined'){
                             identifiers[i] = $elem.closest(widgetsOptions[i].widgetItem).index();
                         }
@@ -316,7 +315,7 @@
                     var identifiers = _createIdentifiers(level -1);
                     var baseID      = matches[1] + '-' + identifiers.join('-') + '-' + matches[3];
                     var attribute   = $('#dynamic-form').yiiActiveForm("find", baseID);
-                    _fixFormValidatonInput(currentWidgetOptions, baseID, id, name);
+                    _fixFormValidatonInput(currentWidgetOptions, attribute, id, name);
                 }
             }
         });

@@ -140,12 +140,10 @@ class DynamicFormWidget extends \yii\base\Widget
 
         if ($this->own_fields) {
             foreach ($this->formFields as $fields) {
-                #foreach ($fields as $field) {
                 $this->_options['fields'][] = [
                     'id' => $fields['id'],
                     'name' => $fields['name']
                 ];
-                #}
             }
         } else {
             foreach ($this->formFields as $field) {
