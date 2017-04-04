@@ -86,7 +86,7 @@
         });
 
         // remove "error/success" css class
-        var yiiActiveFormData = $('' + widgetOptions.formId).yiiActiveForm('data');
+        var yiiActiveFormData = $('#' + widgetOptions.formId).yiiActiveForm('data');
         $template.find('.' + yiiActiveFormData.settings.errorCssClass).removeClass(yiiActiveFormData.settings.errorCssClass);
         $template.find('.' + yiiActiveFormData.settings.successCssClass).removeClass(yiiActiveFormData.settings.successCssClass);
 
@@ -147,8 +147,8 @@
                     aux[level] = i;
                     currentWidgetOptions.fields.forEach(function(input) {
                         var id = input.id.replace("{}", aux.join('-'));
-                        if ($('' + widgetOptions.formId).yiiActiveForm("find", id) !== "undefined") {
-                            $('' + widgetOptions.formId).yiiActiveForm("remove", id);
+                        if ($('#' + widgetOptions.formId).yiiActiveForm("find", id) !== "undefined") {
+                            $('#' + widgetOptions.formId).yiiActiveForm("remove", id);
                         }
                     });
                 }
@@ -162,8 +162,8 @@
 
             widgetOptions.fields.forEach(function(input) {
                 var id = input.id.replace("{}", identifiers.join('-'));
-                if ($('' + widgetOptions.formId).yiiActiveForm("find", id) !== "undefined") {
-                    $('' + widgetOptions.formId).yiiActiveForm("remove", id);
+                if ($('#' + widgetOptions.formId).yiiActiveForm("find", id) !== "undefined") {
+                    $('#' + widgetOptions.formId).yiiActiveForm("remove", id);
                 }
             });
         }
@@ -290,11 +290,11 @@
             attribute.value     = $("#" + id).val();
             attribute.status    = 0;
 
-            if ($('' + widgetOptions.formId).yiiActiveForm("find", id) !== "undefined") {
-                $('' + widgetOptions.formId).yiiActiveForm("remove", id);
+            if ($('#' + widgetOptions.formId).yiiActiveForm("find", id) !== "undefined") {
+                $('#' + widgetOptions.formId).yiiActiveForm("remove", id);
             }
 
-            $('' + widgetOptions.formId).yiiActiveForm("add", attribute);
+            $('#' + widgetOptions.formId).yiiActiveForm("add", attribute);
         }
     };
 
@@ -314,7 +314,7 @@
                     var level       = _getLevel($(this));
                     var identifiers = _createIdentifiers(level -1);
                     var baseID      = matches[1] + '-' + identifiers.join('-') + '-' + matches[3];
-                    var attribute   = $('' + widgetOptions.formId).yiiActiveForm("find", baseID);
+                    var attribute   = $('#' + widgetOptions.formId).yiiActiveForm("find", baseID);
                     _fixFormValidatonInput(currentWidgetOptions, attribute, id, name);
                 }
             }
