@@ -465,7 +465,7 @@
                 var kvClose = 'kv_close_' + id.replace(/\-/g, '_');
 
                 $('#' + id).on('select2:opening', function(ev) {
-                    initS2Open(id, kvClose, ev);
+                    initS2ToggleAll(id);
                 });
 
                 $('#' + id).on('select2:unselect', function() {
